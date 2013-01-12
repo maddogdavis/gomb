@@ -1,5 +1,6 @@
 #include <Servo.h>
 #include <Timer.h>
+#include "gomb.h"
 
 Servo sl;
 Servo sr;
@@ -7,7 +8,7 @@ Servo sc;
 Timer t;
 
 void timer() {
-    digitalWrite(13, digitalRead(13) ^ 1);
+    digitalWrite(12, digitalRead(12) ^ 1);
 }
 
 void loop() {
@@ -15,6 +16,19 @@ void loop() {
 }
 
 // servo
+
+void servos(Mode m) {
+    angle(&sl, m.sl);
+    angle(&sc, m.sc);
+    angle(&sr, m.sr);
+}
+
+void dance(int d) {
+    servos(M_OPEN);
+    delay(d);
+    servos(M_CLOSED);
+    delay(d);
+}
 
 void angle(Servo *s, int a) {
     log("angle", a);
@@ -26,6 +40,7 @@ void angle(Servo *s, int a) {
 void setup() {
     innit();
     report();
+    ready();
 }
 
 void innit() {
@@ -36,21 +51,14 @@ void innit() {
 }
 
 void report() {
-    angle(&sl, 30);
-    angle(&sr, 30);
-    angle(&sc, 120);
-    delay(500);
-    angle(&sl, 120);
-    angle(&sr, 120);
-    angle(&sc, 30);
-    delay(500);
-    angle(&sl, 30);
-    angle(&sr, 30);
-    angle(&sc, 120);
-    delay(500);
-    angle(&sl, 120);
-    angle(&sr, 120);
-    angle(&sc, 30);
+    dance(500);
+}
+
+void ready() {
+    digitalWrite(13, HIGH);
+    delay(10000);
+    digitalWrite(13, LOW);
+    servos(M_OPEN);
 }
 
 void init_serial() {
@@ -58,17 +66,18 @@ void init_serial() {
 }
 
 void init_pins() {
+    pinMode(12, OUTPUT);
     pinMode(13, OUTPUT);
 }
 
 void init_timer() {
-    t.every(2000, timer);
+    t.every(100, timer);
 }
 
 void init_servos() {
     sl.attach(9);
-    sr.attach(8);
-    sc.attach(7);
+    sc.attach(8);
+    sr.attach(7);
 }
 
 // util
