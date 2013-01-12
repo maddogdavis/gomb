@@ -9,6 +9,7 @@ Timer t;
 
 void timer() {
     digitalWrite(12, digitalRead(12) ^ 1);
+    int v = analogRead(A0); log("A0", v);
 }
 
 void loop() {
@@ -18,9 +19,14 @@ void loop() {
 // servo
 
 void servos(Mode m) {
+    log(m.m);
     angle(&sl, m.sl);
     angle(&sc, m.sc);
     angle(&sr, m.sr);
+}
+
+void angle(Servo *s, int a) {
+    s->write(a);
 }
 
 void dance(int d) {
@@ -30,11 +36,6 @@ void dance(int d) {
         servos(M_CLOSED);
         delay(d);
     }
-}
-
-void angle(Servo *s, int a) {
-    log("angle", a);
-    s->write(a);
 }
 
 // init
@@ -59,7 +60,7 @@ void report() {
 void ready() {
     servos(M_CLOSED);
     digitalWrite(13, HIGH);
-    delay(10000);
+    delay(5000);
     digitalWrite(13, LOW);
     servos(M_OPEN);
 }
@@ -83,10 +84,14 @@ void init_servos() {
     sr.attach(7);
 }
 
-// util
+// log
 
 void log(char *m, int v) {
     Serial.print(m);
     Serial.print(": ");
     Serial.println(v, DEC);
+}
+
+void log(char *m) {
+    Serial.println(m);
 }
