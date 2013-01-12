@@ -6,25 +6,46 @@ Servo sl;
 Servo sr;
 Servo sc;
 Timer t;
+Ultra uc = {"capture", A2, 0, 0};
+Ultra uf = {"flush",   A3, 0, 0};
 
-void timer() {
-    digitalWrite(12, digitalRead(12) ^ 1);
-    int x = analogRead(A2);
-    int y = analogRead(A3);
-    log("sensors", x, y);
-}
+Mode *mode;
 
 void loop() {
     t.update();
 }
 
+void timer() {
+    digitalWrite(12, digitalRead(12) ^ 1);
+    ultra(&uc);
+    ultra(&uf);
+    transitions();
+}
+
+// transitions
+
+void transitions() {
+}
+
+// ultra
+
+void ultra(Ultra *u) {
+    u->v = analogRead(u->pin);
+}
+
+void baseline(Ultra *u) {
+    ultra(u);
+    u->base = u->v;
+    log(u->m, u->base);
+}
+
 // servo
 
 void servos(Mode m) {
-    log(m.m);
     angle(&sl, m.sl);
     angle(&sc, m.sc);
     angle(&sr, m.sr);
+    log(m.m);
 }
 
 void angle(Servo *s, int a) {
@@ -61,6 +82,8 @@ void report() {
 }
 
 void ready() {
+    baseline(&uc);
+    baseline(&uf);
     servos(M_CLOSED);
     digitalWrite(13, HIGH);
     delay(5000);
@@ -88,6 +111,8 @@ void init_servos() {
 }
 
 void init_ultras() {
+    uc.pin = A2;
+    uf.pin = A3;
 }
 
 // log
