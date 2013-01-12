@@ -24,10 +24,12 @@ void servos(Mode m) {
 }
 
 void dance(int d) {
-    servos(M_OPEN);
-    delay(d);
-    servos(M_CLOSED);
-    delay(d);
+    for (int i=0; i < 3; i++) {
+        servos(M_OPEN);
+        delay(d);
+        servos(M_CLOSED);
+        delay(d);
+    }
 }
 
 void angle(Servo *s, int a) {
@@ -55,6 +57,7 @@ void report() {
 }
 
 void ready() {
+    servos(M_CLOSED);
     digitalWrite(13, HIGH);
     delay(10000);
     digitalWrite(13, LOW);
