@@ -1,13 +1,31 @@
+#include "Timer.h"
+
+Timer t;
+
 void setup() {
-   pinMode(13, OUTPUT);
-   pinMode(12, OUTPUT);
+    init_serial();
+    init_pins();
+    init_timer();
+}
+
+void init_serial() {
+    Serial.begin(9600);
+}
+
+void init_pins() {
+    pinMode(13, OUTPUT);
+//   pinMode(12, OUTPUT);
+}
+
+void init_timer() {
+    t.every(2000, timer);
+}
+
+
+void timer() {
+    digitalWrite(13, digitalRead(13) ^ 1);
 }
 
 void loop() {
-    digitalWrite(13, HIGH);
-    digitalWrite(12, LOW);
-    delay(1000);
-    digitalWrite(13, LOW);
-    digitalWrite(12, HIGH);
-    delay(1000);
+    t.update();
 }
