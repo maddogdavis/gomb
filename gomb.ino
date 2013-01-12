@@ -9,7 +9,9 @@ Timer t;
 
 void timer() {
     digitalWrite(12, digitalRead(12) ^ 1);
-    int v = analogRead(A0); log("A0", v);
+    int x = analogRead(A2);
+    int y = analogRead(A3);
+    log("sensors", x, y);
 }
 
 void loop() {
@@ -50,6 +52,7 @@ void innit() {
     init_serial();
     init_pins();
     init_timer();
+    init_ultras();
     init_servos();
 }
 
@@ -84,6 +87,9 @@ void init_servos() {
     sr.attach(7);
 }
 
+void init_ultras() {
+}
+
 // log
 
 void log(char *m, int v) {
@@ -94,4 +100,10 @@ void log(char *m, int v) {
 
 void log(char *m) {
     Serial.println(m);
+}
+
+void log(char *m, int x, int y) {
+    char c[128];
+    sprintf(c, "%s: %d %d",m, x, y);
+    Serial.println(c);
 }
