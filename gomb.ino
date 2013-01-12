@@ -1,9 +1,9 @@
 #include <Servo.h>
-#include "Timer.h"
+#include <Timer.h>
 
 Servo sl;
-//Servo sr;
-//Servo sc;
+Servo sr;
+Servo sc;
 Timer t;
 
 void timer() {
@@ -37,12 +37,20 @@ void innit() {
 
 void report() {
     angle(&sl, 30);
+    angle(&sr, 30);
+    angle(&sc, 120);
     delay(500);
     angle(&sl, 120);
+    angle(&sr, 120);
+    angle(&sc, 30);
     delay(500);
     angle(&sl, 30);
+    angle(&sr, 30);
+    angle(&sc, 120);
     delay(500);
     angle(&sl, 120);
+    angle(&sr, 120);
+    angle(&sc, 30);
 }
 
 void init_serial() {
@@ -59,8 +67,8 @@ void init_timer() {
 
 void init_servos() {
     sl.attach(9);
-//    sr.attach(17);
-//    sc.attach(18);
+    sr.attach(8);
+    sc.attach(7);
 }
 
 // util
