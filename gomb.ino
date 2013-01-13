@@ -14,6 +14,8 @@ Motor mr = {"righ",   30, 120, sr};
 Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
 Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
 
+State state;
+
 void loop() {
     t.update();
 }
@@ -27,7 +29,14 @@ void timer() {
 // transitions
 
 void update() {
-    log("ultra", uc.val.v, uf.val.v);
+    
+}
+
+// state
+
+void set_state() {
+    set_servos(state.mode);
+    log(&state);
 }
 
 // ultra
@@ -103,7 +112,7 @@ void ready() {
     digitalWrite(13, HIGH);
     delay(5000);
     digitalWrite(13, LOW);
-    set_servos(M_OPEN);
+    set_state();
 }
 
 void init_serial() {
@@ -134,6 +143,7 @@ void init_state() {
     S_OPEN.next = &S_CAPTURE;
     S_CAPTURE.next = &S_FLUSH;
     S_FLUSH.next = &S_OPEN;
+    state = S_OPEN;
 }
 
 // log
