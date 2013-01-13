@@ -15,6 +15,7 @@ Ultra uc = {{"capture", A2, 50}, {0, 0, 0, 0UL}};
 Ultra uf = {{"flush",   A3,  5}, {0, 0, 0, 0UL}};
 
 State state;
+unsigned long wakeup;
 
 void loop() {
     t.update();
@@ -23,6 +24,7 @@ void loop() {
 void timer() {
     heartbeat();
     read_ultras();
+    if (!awake()) return;
     analyse();
 }
 
@@ -41,10 +43,6 @@ void analyse(int type, Ultra *u) {
     if (T_QUIET == type) {
         if (millis() - u->val.quiet_at > 30000) transition();
     }
-//        case T_ACTIVE:
-//        break;
-//        case T_QUIET:
-//        break;
 }
 
 void transition() {
@@ -89,6 +87,7 @@ void set_servos(Mode m) {
     set_servo(&ml, m.l);
     set_servo(&mc, m.c);
     set_servo(&mr, m.r);
+    quiescent(5000);
 }
 
 void set_servo(Motor *m, int mode) {
@@ -208,4 +207,13 @@ void noop() {
 
 void heartbeat() {
     digitalWrite(12, digitalRead(12) ^ 1);
+    digitalWrite(13, awake() ? 0 : 1);
+}
+
+void quiescent(int ms) {
+    wakeup = millis() + (unsigned long) ms;
+}
+
+int awake() {
+    return millis() > wakeup;
 }
