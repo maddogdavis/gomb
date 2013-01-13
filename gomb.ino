@@ -6,8 +6,9 @@ Servo sl;
 Servo sr;
 Servo sc;
 Timer t;
-Ultra uc = {"capture", A2, 0, 0};
-Ultra uf = {"flush",   A3, 0, 0};
+
+int uhc[10]; Ultra uc = {{"capture", A2}, {0, 0}, {uhc,0,0}};
+int uhf[10]; Ultra uf = {{"flush",   A3}, {0, 0}, {uhf,0,0}};
 
 Mode *mode;
 
@@ -25,18 +26,21 @@ void timer() {
 // transitions
 
 void transitions() {
+    ultra(&uc);
+    ultra(&uf);
+    log("ultra", uc.val.v, uf.val.v);
 }
 
 // ultra
 
 void ultra(Ultra *u) {
-    u->v = analogRead(u->pin);
+    u->val.v = analogRead(u->def.pin);
 }
 
 void baseline(Ultra *u) {
     ultra(u);
-    u->base = u->v;
-    log(u->m, u->base);
+    u->val.base = u->val.v;
+    log(u->def.name, u->val.base);
 }
 
 // servo
@@ -111,8 +115,7 @@ void init_servos() {
 }
 
 void init_ultras() {
-    uc.pin = A2;
-    uf.pin = A3;
+    noop();
 }
 
 // log
@@ -131,4 +134,9 @@ void log(char *m, int x, int y) {
     char c[128];
     sprintf(c, "%s: %d %d",m, x, y);
     Serial.println(c);
+}
+
+// util
+
+void noop() {
 }
