@@ -25,7 +25,7 @@ typedef struct {
 typedef struct {
     int v;
     int base;
-    int quiet_at;
+    unsigned long quiet_at;
 } UltraVal;
 
 typedef struct {

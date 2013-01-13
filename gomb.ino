@@ -7,8 +7,8 @@ Servo sr;
 Servo sc;
 Timer t;
 
-Ultra uc = {{"capture", A2}, {0, 0, 0}};
-Ultra uf = {{"flush",   A3}, {0, 0, 0}};
+Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
+Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
 
 Mode *mode;
 
@@ -40,7 +40,8 @@ void ultra(Ultra *u) {
 void baseline(Ultra *u) {
     ultra(u);
     u->val.base = u->val.v;
-    log(u->def.name, u->val.base);
+    u->val.quiet_at = millis();
+    log(u);
 }
 
 // servo
@@ -133,7 +134,13 @@ void log(char *m) {
 void log(char *m, int x, int y) {
     char c[128];
     sprintf(c, "%s: %d %d",m, x, y);
-    Serial.println(c);
+    log(c);
+}
+
+void log (Ultra *u) {
+    char c[128];
+    sprintf(c, "ultra(%s): v=%d, base=%d, quiet=%lu", u->def.name, u->val.v, u->val.base, u->val.quiet_at);
+    log(c);
 }
 
 // util
