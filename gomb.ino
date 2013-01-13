@@ -11,8 +11,8 @@ Motor ml = {"left",   30, 120, sl};
 Motor mc = {"centre", 30, 120, sc};
 Motor mr = {"righ",   30, 120, sr};
 
-Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
-Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
+Ultra uc = {{"capture", A2, 50}, {0, 0, 0, 0UL}};
+Ultra uf = {{"flush",   A3,  5}, {0, 0, 0, 0UL}};
 
 State state;
 
@@ -23,13 +23,33 @@ void loop() {
 void timer() {
     heartbeat();
     read_ultras();
-    update();
+    analyse();
 }
 
 // transitions
 
-void update() {
-    
+void analyse() {
+    analyse(state.trigger_c, &uc);
+    analyse(state.trigger_f, &uf);
+}
+
+void analyse(int type, Ultra *u) {
+    if (u->val.active) log(u);
+    if (T_ACTIVE == type) {
+        if (u->val.active) transition();
+    }
+    if (T_QUIET == type) {
+        if (millis() - u->val.quiet_at > 30000) transition();
+    }
+//        case T_ACTIVE:
+//        break;
+//        case T_QUIET:
+//        break;
+}
+
+void transition() {
+    state = *state.next;
+    set_state();
 }
 
 // state
@@ -55,6 +75,12 @@ void read_ultras() {
 
 void read_ultra(Ultra *u) {
     u->val.v = analogRead(u->def.pin);
+    u->val.active = is_active(u);
+    if (u->val.active) u->val.quiet_at = millis();
+}
+
+int is_active(Ultra *u) {
+    return (u->val.v < (u->val.base - u->def.variance));
 }
 
 // servo
@@ -63,7 +89,6 @@ void set_servos(Mode m) {
     set_servo(&ml, m.l);
     set_servo(&mc, m.c);
     set_servo(&mr, m.r);
-    log(m.m);
 }
 
 void set_servo(Motor *m, int mode) {
@@ -164,7 +189,7 @@ void log(char *m, int x, int y) {
     log(c);
 }
 
-void log (Ultra *u) {
+void log(Ultra *u) {
     char c[128];
     sprintf(c, "ultra(%s): v=%d, base=%d, quiet=%lu", u->def.name, u->val.v, u->val.base, u->val.quiet_at);
     log(c);

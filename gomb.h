@@ -36,11 +36,13 @@ Mode M_FLUSH   = {"flush",   MODE_CLOSED, MODE_CLOSED, MODE_CLOSED};
 typedef struct {
     char *name;
     int pin;
+    int variance;
 } UltraDef;
 
 typedef struct {
     int v;
     int base;
+    int active;
     unsigned long quiet_at;
 } UltraVal;
 
@@ -74,4 +76,4 @@ typedef struct state State;
 State S_INITIAL = { "initial", M_CLOSED,  T_NONE,   T_NONE,   0 /* S_INITIAL */};
 State S_OPEN    = { "open",    M_OPEN,    T_ACTIVE, T_NONE,   0 /* S_CAPTURE */};
 State S_CAPTURE = { "capture", M_CAPTURE, T_NONE,   T_ACTIVE, 0 /* S_FLUSH */  };
-State S_FLUSH   = { "flush",   M_FLUSH,   T_QUIET,  T_NONE,   0 /* S_OPEN */   };
+State S_FLUSH   = { "flush",   M_FLUSH,   T_NONE,   T_QUIET,  0 /* S_OPEN */   };
