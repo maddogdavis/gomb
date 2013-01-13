@@ -1,5 +1,3 @@
-int S_OPEN = 30;
-int S_CLOSED = 120;
 
 //
 // Servos, defined as Motors
@@ -16,6 +14,9 @@ typedef struct {
 // Modes for 3 servos
 //
 
+int MODE_OPEN = 0;
+int MODE_CLOSED = 1;
+
 typedef struct {
     char *m;
     int l;
@@ -23,10 +24,10 @@ typedef struct {
     int r;
 } Mode;
 
-Mode M_OPEN    = {"open",    S_OPEN,   S_OPEN,   S_OPEN  };
-Mode M_CLOSED  = {"closed",  S_CLOSED, S_CLOSED, S_CLOSED};
-Mode M_CAPTURE = {"capture", S_CLOSED, S_OPEN,   S_CLOSED};
-Mode M_FLUSH   = {"flush",   S_CLOSED, S_CLOSED, S_CLOSED};
+Mode M_OPEN    = {"open",    MODE_OPEN,   MODE_OPEN,   MODE_OPEN  };
+Mode M_CLOSED  = {"closed",  MODE_CLOSED, MODE_CLOSED, MODE_CLOSED};
+Mode M_CAPTURE = {"capture", MODE_CLOSED, MODE_OPEN,   MODE_CLOSED};
+Mode M_FLUSH   = {"flush",   MODE_CLOSED, MODE_CLOSED, MODE_CLOSED};
 
 //
 // Ultrasonic sensors

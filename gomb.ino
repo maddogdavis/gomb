@@ -53,13 +53,18 @@ void read_ultra(Ultra *u) {
 // servo
 
 void set_servos(Mode m) {
-    angle(&ml, m.l);
-    angle(&mc, m.c);
-    angle(&mr, m.r);
+    set_servo(&ml, m.l);
+    set_servo(&mc, m.c);
+    set_servo(&mr, m.r);
     log(m.m);
 }
 
-void angle(Motor *m, int a) {
+void set_servo(Motor *m, int mode) {
+    if (mode == MODE_OPEN) drive_servo(m, m->open);
+    if (mode == MODE_CLOSED) drive_servo(m, m->close);
+}
+
+void drive_servo(Motor *m, int a) {
     m->servo.write(a);
 }
 
