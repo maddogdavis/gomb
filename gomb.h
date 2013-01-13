@@ -50,17 +50,28 @@ typedef struct {
 } Ultra;
 
 //
+// Triggers
+//
+
+int T_NONE = 100;
+int T_ACTIVE = 200;
+int T_QUIET = 300;
+
+//
 // States / Transitions
 //
 
-typedef struct {
+struct state {
     char *name;
     Mode mode;
-//    Mode next;
-//    Ultra ultra;
-//    int type;
-} State;
+    int trigger_c;
+    int trigger_f;
+    struct state *next;
+};
 
-State S_INITIAL = { "initial", M_CLOSED };
-State S_CAPTURE = { "capture", M_CAPTURE };
+typedef struct state State;
 
+State S_INITIAL = { "initial", M_CLOSED,  T_NONE,   T_NONE,   0 /* S_INITIAL */};
+State S_OPEN    = { "open",    M_OPEN,    T_ACTIVE, T_NONE,   0 /* S_CAPTURE */};
+State S_CAPTURE = { "capture", M_CAPTURE, T_NONE,   T_ACTIVE, 0 /* S_FLUSH */  };
+State S_FLUSH   = { "flush",   M_FLUSH,   T_QUIET,  T_NONE,   0 /* S_OPEN */   };

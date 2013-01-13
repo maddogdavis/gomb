@@ -14,8 +14,6 @@ Motor mr = {"righ",   30, 120, sr};
 Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
 Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
 
-State state;
-
 void loop() {
     t.update();
 }
@@ -132,7 +130,10 @@ void init_ultras() {
 }
 
 void init_state() {
-    state = S_INITIAL;
+    S_INITIAL.next = &S_INITIAL;
+    S_OPEN.next = &S_CAPTURE;
+    S_CAPTURE.next = &S_FLUSH;
+    S_FLUSH.next = &S_OPEN;
 }
 
 // log
