@@ -7,6 +7,10 @@ Servo sr;
 Servo sc;
 Timer t;
 
+Motor ml = {"left",   30, 120, sl};
+Motor mc = {"centre", 30, 120, sc};
+Motor mr = {"righ",   30, 120, sr};
+
 Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
 Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
 
@@ -49,14 +53,14 @@ void read_ultra(Ultra *u) {
 // servo
 
 void set_servos(Mode m) {
-    angle(&sl, m.sl);
-    angle(&sc, m.sc);
-    angle(&sr, m.sr);
+    angle(&ml, m.l);
+    angle(&mc, m.c);
+    angle(&mr, m.r);
     log(m.m);
 }
 
-void angle(Servo *s, int a) {
-    s->write(a);
+void angle(Motor *m, int a) {
+    m->servo.write(a);
 }
 
 void dance(int d) {
@@ -113,9 +117,9 @@ void init_timer() {
 }
 
 void init_servos() {
-    sl.attach(9);
-    sc.attach(8);
-    sr.attach(7);
+    ml.servo.attach(9);
+    mc.servo.attach(8);
+    mr.servo.attach(7);
 }
 
 void init_ultras() {

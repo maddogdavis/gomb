@@ -2,14 +2,25 @@ int S_OPEN = 30;
 int S_CLOSED = 120;
 
 //
+// Servos, defined as Motors
+//
+
+typedef struct {
+    char *name;
+    int open;
+    int close;
+    Servo servo;
+} Motor;
+
+//
 // Modes for 3 servos
 //
 
 typedef struct {
     char *m;
-    int sl;
-    int sc;
-    int sr;
+    int l;
+    int c;
+    int r;
 } Mode;
 
 Mode M_OPEN    = {"open",    S_OPEN,   S_OPEN,   S_OPEN  };
