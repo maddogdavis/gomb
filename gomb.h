@@ -1,6 +1,10 @@
 int S_OPEN = 30;
 int S_CLOSED = 120;
 
+//
+// Modes for 3 servos
+//
+
 typedef struct {
     char *m;
     int sl;
@@ -33,12 +37,18 @@ typedef struct {
     UltraVal val;
 } Ultra;
 
+//
+// States / Transitions
+//
 
-//typedef struct {
-//    char *m
-//    Mode current;
+typedef struct {
+    char *name;
+    Mode mode;
 //    Mode next;
 //    Ultra ultra;
 //    int type;
-//} Transition;
+} State;
+
+State S_INITIAL = { "initial", M_CLOSED };
+State S_CAPTURE = { "capture", M_CAPTURE };
 

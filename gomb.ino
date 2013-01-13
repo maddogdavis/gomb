@@ -10,43 +10,45 @@ Timer t;
 Ultra uc = {{"capture", A2}, {0, 0, 0UL}};
 Ultra uf = {{"flush",   A3}, {0, 0, 0UL}};
 
-Mode *mode;
+State state;
 
 void loop() {
     t.update();
 }
 
 void timer() {
-    digitalWrite(12, digitalRead(12) ^ 1);
-    ultra(&uc);
-    ultra(&uf);
-    transitions();
+    heartbeat();
+    read_ultras();
+    update();
 }
 
 // transitions
 
-void transitions() {
-    ultra(&uc);
-    ultra(&uf);
+void update() {
     log("ultra", uc.val.v, uf.val.v);
 }
 
 // ultra
 
-void ultra(Ultra *u) {
-    u->val.v = analogRead(u->def.pin);
-}
-
-void baseline(Ultra *u) {
-    ultra(u);
+void set_baseline(Ultra *u) {
+    read_ultra(u);
     u->val.base = u->val.v;
     u->val.quiet_at = millis();
     log(u);
 }
 
+void read_ultras() {
+    read_ultra(&uc);
+    read_ultra(&uf);
+}
+
+void read_ultra(Ultra *u) {
+    u->val.v = analogRead(u->def.pin);
+}
+
 // servo
 
-void servos(Mode m) {
+void set_servos(Mode m) {
     angle(&sl, m.sl);
     angle(&sc, m.sc);
     angle(&sr, m.sr);
@@ -59,9 +61,9 @@ void angle(Servo *s, int a) {
 
 void dance(int d) {
     for (int i=0; i < 3; i++) {
-        servos(M_OPEN);
+        set_servos(M_OPEN);
         delay(d);
-        servos(M_CLOSED);
+        set_servos(M_CLOSED);
         delay(d);
     }
 }
@@ -80,6 +82,7 @@ void innit() {
     init_timer();
     init_ultras();
     init_servos();
+    init_state();
 }
 
 void report() {
@@ -87,13 +90,13 @@ void report() {
 }
 
 void ready() {
-    baseline(&uc);
-    baseline(&uf);
-    servos(M_CLOSED);
+    set_baseline(&uc);
+    set_baseline(&uf);
+    set_servos(M_CLOSED);
     digitalWrite(13, HIGH);
     delay(5000);
     digitalWrite(13, LOW);
-    servos(M_OPEN);
+    set_servos(M_OPEN);
 }
 
 void init_serial() {
@@ -117,6 +120,10 @@ void init_servos() {
 
 void init_ultras() {
     noop();
+}
+
+void init_state() {
+    state = S_INITIAL;
 }
 
 // log
@@ -143,7 +150,17 @@ void log (Ultra *u) {
     log(c);
 }
 
+void log(State *s) {
+    char c[128];
+    sprintf(c, "state(%s): EMPTY", s->name);
+    log(c);
+}
+
 // util
 
 void noop() {
+}
+
+void heartbeat() {
+    digitalWrite(12, digitalRead(12) ^ 1);
 }
