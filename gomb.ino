@@ -7,8 +7,8 @@ Servo sr;
 Servo sc;
 Timer t;
 
-int uhc[10]; Ultra uc = {{"capture", A2}, {0, 0}, {uhc,0,0}};
-int uhf[10]; Ultra uf = {{"flush",   A3}, {0, 0}, {uhf,0,0}};
+Ultra uc = {{"capture", A2}, {0, 0, 0}};
+Ultra uf = {{"flush",   A3}, {0, 0, 0}};
 
 Mode *mode;
 

@@ -17,8 +17,6 @@ Mode M_FLUSH   = {"flush",   S_CLOSED, S_CLOSED, S_CLOSED};
 // Ultrasonic sensors
 //
 
-int ULTRA_HISTORY = 10;
-
 typedef struct {
     char *name;
     int pin;
@@ -27,18 +25,12 @@ typedef struct {
 typedef struct {
     int v;
     int base;
-} UltraVal;
-
-typedef struct {
-    int* vs;
-    int i;
     int quiet_at;
-} UltraHistory;
+} UltraVal;
 
 typedef struct {
     UltraDef def;
     UltraVal val;
-    UltraHistory hist;
 } Ultra;
 
 
