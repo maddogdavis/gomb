@@ -2,6 +2,9 @@
 #include <Timer.h>
 #include "gomb.h"
 
+// d0 calibrate: open(50) closed(160)
+// d1 calibrate: open(50) closed(160)
+
 Servo sl;
 Servo sr;
 Servo sc;
@@ -11,17 +14,20 @@ Motor ml = {"left",   30, 120, sl};
 Motor mc = {"centre", 30, 120, sc};
 Motor mr = {"righ",   30, 120, sr};
 
-Ultra uc = {{"capture", A2, 50}, {0, 0, 0, 0UL}};
-Ultra uf = {{"flush",   A3,  5}, {0, 0, 0, 0UL}};
+Ultra uc = {{"capture", A1, 3}, {0, 0, 0, 0UL}};
+Ultra uf = {{"flush",   A1, 3}, {0, 0, 0, 0UL}};
 
 State state;
 unsigned long wakeup;
 
 void loop() {
-    t.update();
+//    t.update();
+    timer();
+    delay(100);
 }
 
 void timer() {
+log("ultra", uc.val.v, uf.val.v); 
     heartbeat();
     read_ultras();
     if (!awake()) return;
@@ -149,7 +155,7 @@ void init_pins() {
 }
 
 void init_timer() {
-    t.every(100, timer);
+//    t.every(500, timer);
 }
 
 void init_servos() {
