@@ -1,6 +1,7 @@
 import serial
+import time
 
-s = serial.Serial('/dev/tty.usbmodem1d11', 9600)
+ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
 
 
 t = {
@@ -48,12 +49,24 @@ def available(serial):
     return True
 
 def act():
-    b = s.read()
+    b = read()
     print b
     if b == '.': return
+    transition(c, b)
+
+def transition(c, b):
     nc = t[(c,b)]
-    print nc
+    ss = a[(c,nc)]
+    for s in ss:
+        write(s)
+    c = nc
+
+def read():
+    return ser.read()
+
+def write(b):
+    ser.write(b)
 
 while True:
-    if available(s):
+    if available(ser):
       act()

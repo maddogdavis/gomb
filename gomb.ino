@@ -5,15 +5,33 @@
 #define PIN_T1 5
 
 #define C_HEARTBEAT "."
-#define C_T0_ACTIVE "0"
-#define C_T1_ACTIVE "1"
+#define C_T0_ACTIVE "R"
+#define C_T1_ACTIVE "S"
+
+#define MS_BEAT 1000
+#define MS_QUIET 20000
+#define MS_SETTLE 5000
+
+unsigned long remove = millis();
+
+typedef struct {
+    int active;
+    int quiet;
+    int prev;
+    char *code;
+    unsigned long ms;
+} Trip;
 
 Servo d0;
 Servo d1;
 Servo d2;
 IRsend ir;
-unsigned long last;
-int t[2];
+unsigned long msbeat = millis();
+unsigned long mssettled = millis();
+Trip t[2] = {
+    { HIGH, HIGH, LOW, "r", millis() },
+    { HIGH, HIGH, LOW, "s", millis() }
+};
 
 void setup() {
     Serial.begin(9600);
@@ -24,27 +42,30 @@ void setup() {
     pinMode(PIN_T1, INPUT);
     ir.enableIROut(38);
     ir.mark(0);
-    t[0] = t[1] = HIGH;
-    last = millis();
     dance();
+    delay(2000);
 }
 
 void loop() {
-    if (quantum()) clear();
-    for (;Serial.available() > 0;) in();
+    times();
+    consume();
     trips();
 }
 
-int quantum() {
-    if (millis() - last < 1000) return 0;
-    last = millis();
-    return 1;
+void times() {
+    if (is_beat()) beat();
+//    if (is_quiet(0)) quiet(0);
+//    if (is_quiet(1)) quiet(1);
 }
 
-void clear() {
-    send(C_HEARTBEAT);
-    t[0] = HIGH;
-    t[1] = HIGH;
+int available() {
+    return Serial.available() > 0
+}
+
+void consume() {
+    if (!available()) return;
+    for(;available();)
+        command();
 }
 
 void trips() {
@@ -52,16 +73,54 @@ void trips() {
     trips(PIN_T1, 1, C_T1_ACTIVE);
 }
 
+int is_beat() {
+    return past(msbeat, MS_BEAT);
+}
+
+int is_quiet(int i) {
+    return past(t[i].ms, MS_QUIET);
+}
+
+int is_settled() {
+    return past(mssettled, MS_SETTLE);
+}
+
+int past(unsigned long v, unsigned long p) {
+    return millis() - v > p;
+}
+
+void beat() {
+    send(C_HEARTBEAT);
+    t[0].active = t[1].active = HIGH;
+    msbeat = millis();
+}
+
+int quiet(int i) {
+    quiescent(i);
+    t[i].quiet = HIGH;
+}
+
 void trips(int pin, int i, char* code) {
+    if (!is_settled()) return;
     if (digitalRead(pin) == HIGH) return;
-    if (t[i] == LOW) return;
-    t[i] = LOW;
+    if (t[i].active == LOW) return;
+    t[i].active = t[i].quiet = LOW;
+    t[i].ms = millis();
     send(code);
 }
 
-// Not used.
-void in() {
-    int b = Serial.read();
+void quiescent(int i) {
+    if (t[i].quiet == t[i].prev) return;
+    t[i].prev = t[i].quiet;
+    if (t[i].quiet == LOW) return;
+    send(t[i].code);
+}
+
+void command() {
+    command(Serial.read());
+}
+
+void command(int b) {
     if (b == 'A') open(d0);
     if (b == 'B') open(d1);
     if (b == 'C') open(d2);
