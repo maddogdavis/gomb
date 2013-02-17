@@ -71,7 +71,6 @@ def read():
 def write(b):
     ser.write(b)
 
-# TODO: Flush serial input buffer on startup.
 while available(): read()
 while True:
     if available():
