@@ -9,8 +9,8 @@
 #define C_T1_ACTIVE "S"
 
 #define MS_BEAT 1000
-#define MS_QUIET 20000
-#define MS_SETTLE 5000
+#define MS_QUIET 60000
+#define MS_SETTLE 3000
 
 unsigned long remove = millis();
 
@@ -143,6 +143,7 @@ void open(Servo s) {
 
 void angle(Servo s, int a) {
     s.write(a);
+    mssettled = millis();
 }
 
 void dance() {

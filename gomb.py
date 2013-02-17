@@ -16,10 +16,10 @@ t = {
 
   , ((0,0),'R') : (0,0)
   , ((0,0),'S') : (0,0)
-  , ((1,0),'R') : (1,0)
-  , ((1,0),'s') : (1,0)
-  , ((0,1),'r') : (0,1)
-  , ((0,1),'S') : (0,1)
+  , ((0,1),'R') : (0,1)
+  , ((0,1),'s') : (0,1)
+  , ((1,0),'r') : (1,0)
+  , ((1,0),'S') : (1,0)
   , ((1,1),'r') : (1,1)
   , ((1,1),'s') : (1,1)
 }
@@ -49,17 +49,22 @@ def available(serial):
     return True
 
 def act():
+    global c
     b = read()
     print b
     if b == '.': return
-    transition(c, b)
+    c = transition(c, b)
+    print ":: "
+    print c
 
 def transition(c, b):
     nc = t[(c,b)]
     ss = a[(c,nc)]
+    print ss
+    print nc
     for s in ss:
         write(s)
-    c = nc
+    return nc
 
 def read():
     return ser.read()
