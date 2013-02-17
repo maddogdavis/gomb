@@ -69,6 +69,7 @@ def read():
 def write(b):
     ser.write(b)
 
+# TODO: Flush serial input buffer.
 while True:
     if available(ser):
       act()
