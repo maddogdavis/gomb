@@ -54,12 +54,12 @@ void loop() {
 
 void times() {
     if (is_beat()) beat();
-//    if (is_quiet(0)) quiet(0);
-//    if (is_quiet(1)) quiet(1);
+    if (is_quiet(0)) quiet(0);
+    if (is_quiet(1)) quiet(1);
 }
 
 int available() {
-    return Serial.available() > 0
+    return Serial.available() > 0;
 }
 
 void consume() {
