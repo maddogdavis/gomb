@@ -9,8 +9,8 @@
 #define C_T1_ACTIVE "S"
 
 #define MS_BEAT 1000
-#define MS_QUIET 60000
-#define MS_SETTLE 3000
+#define MS_QUIET 300000
+#define MS_SETTLE 10000
 
 unsigned long remove = millis();
 
