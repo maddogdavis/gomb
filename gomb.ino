@@ -1,46 +1,52 @@
 #include <Servo.h>
 #include <IRremote.h>
 
-#define PIN_T0 2
-#define PIN_T1 5
-
 #define C_HEARTBEAT "."
 #define C_RESET "*"
-#define C_T0_ACTIVE "R"
-#define C_T1_ACTIVE "S"
 
 #define MS_BEAT 1000
 #define MS_QUIET 300000
 #define MS_SETTLE 10000
 
-unsigned long remove = millis();
+Servo s0;
+Servo s1;
+Servo s2;
 
 typedef struct {
+    int pin;
     int active;
     int quiet;
     int prev;
-    char *code;
+    char *acode;
+    char *qcode;
     unsigned long ms;
 } Trip;
 
-Servo d0;
-Servo d1;
-Servo d2;
+typedef struct {
+    int pin;
+    Servo servo;
+} Door;
+
 IRsend ir;
 unsigned long msbeat = millis();
 unsigned long mssettled = millis();
+Door d[3] = {
+    {  8, s0 },
+    {  9, s1 },
+    { 10, s2 }
+};
 Trip t[2] = {
-    { HIGH, HIGH, LOW, "r", millis() },
-    { HIGH, HIGH, LOW, "s", millis() }
+    { 2, HIGH, HIGH, LOW, "R", "r", millis() },
+    { 5, HIGH, HIGH, LOW, "S", "s", millis() }
 };
 
 void setup() {
     Serial.begin(9600);
-    d0.attach(8);
-    d1.attach(9);
-    d2.attach(10);
-    pinMode(PIN_T0, INPUT);
-    pinMode(PIN_T1, INPUT);
+    d[0].servo.attach(d[0].pin);
+    d[1].servo.attach(d[1].pin);
+    d[2].servo.attach(d[2].pin);
+    pinMode(t[0].pin, INPUT);
+    pinMode(t[1].pin, INPUT);
     ir.enableIROut(38);
     ir.mark(0);
     dance();
@@ -71,8 +77,8 @@ void consume() {
 }
 
 void trips() {
-    trips(PIN_T0, 0, C_T0_ACTIVE);
-    trips(PIN_T1, 1, C_T1_ACTIVE);
+    trip(0);
+    trip(1);
 }
 
 int is_beat() {
@@ -102,7 +108,11 @@ int quiet(int i) {
     t[i].quiet = HIGH;
 }
 
-void trips(int pin, int i, char* code) {
+void trip(int i) {
+    trip(t[i].pin, i, t[i].acode); 
+}
+
+void trip(int pin, int i, char* code) {
     if (!is_settled()) return;
     if (digitalRead(pin) == HIGH) return;
     if (t[i].active == LOW) return;
@@ -115,7 +125,7 @@ void quiescent(int i) {
     if (t[i].quiet == t[i].prev) return;
     t[i].prev = t[i].quiet;
     if (t[i].quiet == LOW) return;
-    send(t[i].code);
+    send(t[i].qcode);
 }
 
 void command() {
@@ -123,24 +133,24 @@ void command() {
 }
 
 void command(int b) {
-    if (b == 'A') open(d0);
-    if (b == 'B') open(d1);
-    if (b == 'C') open(d2);
-    if (b == 'a') close(d0);
-    if (b == 'b') close(d1);
-    if (b == 'c') close(d2);
+    if (b == 'A') open(0);
+    if (b == 'B') open(1);
+    if (b == 'C') open(2);
+    if (b == 'a') close(0);
+    if (b == 'b') close(1);
+    if (b == 'c') close(2);
 }
 
 void send(char *code) {
     Serial.write(code);
 }
 
-void close(Servo s) {
-    angle(s, 50);
+void open(int i) {
+    angle(d[i].servo, 160);
 }
 
-void open(Servo s) {
-    angle(s, 160);
+void close(int i) {
+    angle(d[i].servo, 50);
 }
 
 void angle(Servo s, int a) {
@@ -149,13 +159,13 @@ void angle(Servo s, int a) {
 }
 
 void dance() {
-    close(d0); delay(300);
-    close(d1); delay(300);
-    close(d2); delay(300);
-     open(d0); delay(300);
-     open(d1); delay(300);
-     open(d2); delay(300);
-    close(d0); delay(300);
-    close(d1); delay(300);
-    close(d2); delay(300);
+    close(0); delay(300);
+    close(1); delay(300);
+    close(2); delay(300);
+     open(0); delay(300);
+     open(1); delay(300);
+     open(2); delay(300);
+    close(0); delay(300);
+    close(1); delay(300);
+    close(2); delay(300);
 }

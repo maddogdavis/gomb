@@ -44,8 +44,8 @@ a = {
 
 c = (0,0)
 
-def available(serial):
-    return True
+def available():
+    return ser.inWaiting() > 0
 
 def act():
     global c
@@ -58,10 +58,12 @@ def act():
 
 def transition(c, b):
     nc = t[(c,b)]
-    ss = a[(c,nc)]
-    for s in ss:
-        write(s)
+    doors(a[(c,nc)])
     return nc
+
+def doors(ds):
+    for d in ds:
+        write(d)
 
 def read():
     return ser.read()
@@ -69,7 +71,8 @@ def read():
 def write(b):
     ser.write(b)
 
-# TODO: Flush serial input buffer.
+# TODO: Flush serial input buffer on startup.
+while available(): read()
 while True:
-    if available(ser):
+    if available():
       act()
