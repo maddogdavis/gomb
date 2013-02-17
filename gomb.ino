@@ -6,7 +6,7 @@
 
 #define MS_BEAT 1000
 #define MS_QUIET 300000
-#define MS_SETTLE 10000
+#define MS_SETTLE 1000
 
 Servo s0;
 Servo s1;
@@ -28,8 +28,8 @@ typedef struct {
 } Door;
 
 IRsend ir;
-unsigned long msbeat = millis();
-unsigned long mssettled = millis();
+unsigned long msbeat;
+unsigned long mssettled;
 Door d[3] = {
     {  8, s0 },
     {  9, s1 },
@@ -50,7 +50,8 @@ void setup() {
     ir.enableIROut(38);
     ir.mark(0);
     dance();
-    delay(2000);
+    msbeat = millis();
+    mssettled = millis();
     send(C_RESET);
 }
 
@@ -114,11 +115,24 @@ void trip(int i) {
 
 void trip(int pin, int i, char* code) {
     if (!is_settled()) return;
-    if (digitalRead(pin) == HIGH) return;
+    if (tripped(pin) == HIGH) return;
     if (t[i].active == LOW) return;
     t[i].active = t[i].quiet = LOW;
     t[i].ms = millis();
     send(code);
+}
+
+int tripped(int pin) {
+    if (digitalRead(pin) == HIGH) return HIGH;
+    delay(5);
+    if (digitalRead(pin) == HIGH) return HIGH;
+    delay(5);
+    if (digitalRead(pin) == HIGH) return HIGH;
+    delay(5);
+    if (digitalRead(pin) == HIGH) return HIGH;
+    delay(5);
+    if (digitalRead(pin) == HIGH) return HIGH;
+    return LOW;
 }
 
 void quiescent(int i) {
