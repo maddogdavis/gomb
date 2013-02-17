@@ -5,6 +5,7 @@
 #define PIN_T1 5
 
 #define C_HEARTBEAT "."
+#define C_RESET "*"
 #define C_T0_ACTIVE "R"
 #define C_T1_ACTIVE "S"
 
@@ -44,6 +45,7 @@ void setup() {
     ir.mark(0);
     dance();
     delay(2000);
+    send(C_RESET);
 }
 
 void loop() {

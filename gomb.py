@@ -3,7 +3,6 @@ import time
 
 ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
 
-
 t = {
     ((0,0),'r') : (1,0)
   , ((0,0),'s') : (0,1)
@@ -53,15 +52,13 @@ def act():
     b = read()
     print b
     if b == '.': return
+    if b == '*': return
     c = transition(c, b)
-    print ":: "
     print c
 
 def transition(c, b):
     nc = t[(c,b)]
     ss = a[(c,nc)]
-    print ss
-    print nc
     for s in ss:
         write(s)
     return nc
