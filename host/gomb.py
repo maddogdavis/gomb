@@ -1,6 +1,8 @@
 import serial
 from datetime import datetime
 import time
+import uuid
+import os
 
 ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
 
@@ -71,7 +73,9 @@ def transition(c, b):
 
 def record(b):
     if b == '.': return
-    log(m[b])
+    i = ident()
+    log(m[b], i)
+    camera(i)
 
 def doors(ds):
     for d in ds:
@@ -83,12 +87,21 @@ def read():
 def write(b):
     ser.write(b)
 
-# { LOGGING
-def log(s):
-    print msg(s)
+# { CAMERA
+def camera(i):
+    os.system("ssh snap window.sh "+i+" &")
+# CAMERA }
 
-def msg(s):
-  return stamp() + " gomb: " + s
+# { UUID
+def ident():
+    return str(uuid.uuid4())[0:8]
+# UUID }
+# { LOGGING
+def log(s, i):
+    print msg(s, i)
+
+def msg(s, i):
+  return stamp() + " [" + i + "] gomb: " + s
 
 def stamp():
   now = datetime.now()
