@@ -6,6 +6,8 @@ import os
 
 ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
 
+snap = "false && ssh snap window.sh "+i+" &"
+
 t = {
     ((0,0),'r') : (1,0)
   , ((0,0),'s') : (0,1)
@@ -89,7 +91,7 @@ def write(b):
 
 # { CAMERA
 def camera(i):
-    os.system("ssh snap window.sh "+i+" &")
+    os.system()
 # CAMERA }
 
 # { UUID
