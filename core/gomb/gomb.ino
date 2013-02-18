@@ -8,10 +8,6 @@
 #define MS_QUIET 300000
 #define MS_SETTLE 1000
 
-Servo s0;
-Servo s1;
-Servo s2;
-
 typedef struct {
     int pin;
     int active;
@@ -24,16 +20,16 @@ typedef struct {
 
 typedef struct {
     int pin;
-    Servo servo;
+    Servo &servo;
 } Door;
 
 IRsend ir;
 unsigned long msbeat;
 unsigned long mssettled;
 Door d[3] = {
-    {  8, s0 },
-    {  9, s1 },
-    { 10, s2 }
+    {  8, *(new Servo) },
+    {  9, *(new Servo) },
+    { 10, *(new Servo) }
 };
 Trip t[2] = {
     { 2, HIGH, HIGH, LOW, "R", "r", millis() },
