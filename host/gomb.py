@@ -48,7 +48,7 @@ m = {
   , 'R' : "outer trip"
   , 'r' : "outer quiet"
   , 'S' : "inner trip"
-  , 'r' : "inner quiet"
+  , 's' : "inner quiet"
 }
 
 c = (0,0)
