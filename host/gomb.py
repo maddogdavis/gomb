@@ -1,4 +1,5 @@
 import serial
+from datetime import datetime
 import time
 
 ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
@@ -42,6 +43,14 @@ a = {
   , ((1,1),(1,1)) : [           ]
 }
 
+m = {
+    '*' : "controller restart"
+  , 'R' : "outer trip"
+  , 'r' : "outer quiet"
+  , 'S' : "inner trip"
+  , 'r' : "inner quiet"
+}
+
 c = (0,0)
 
 def available():
@@ -50,16 +59,19 @@ def available():
 def act():
     global c
     b = read()
-    print b
+    record(b)
     if b == '.': return
     if b == '*': return
     c = transition(c, b)
-    print c
 
 def transition(c, b):
     nc = t[(c,b)]
     doors(a[(c,nc)])
     return nc
+
+def record(b):
+    if b == '.': return
+    log(m[b])
 
 def doors(ds):
     for d in ds:
@@ -70,6 +82,21 @@ def read():
 
 def write(b):
     ser.write(b)
+
+# { LOGGING
+def log(s):
+    print msg(s)
+
+def msg(s):
+  return stamp() + " gomb: " + s
+
+def stamp():
+  now = datetime.now()
+  return now.strftime("%b %d %H:%M:%S")
+
+def now():
+  return datetime.now()
+# LOGGING }
 
 while available(): read()
 while True:
