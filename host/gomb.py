@@ -4,7 +4,7 @@ import time
 import uuid
 import os
 
-ser = serial.Serial('/dev/tty.usbmodem1d11', 9600)
+ser = serial.Serial('/dev/tty.gomb', 9600)
 
 snap = "false && ssh snap window.sh {0} &"
 
