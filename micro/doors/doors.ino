@@ -7,8 +7,8 @@ Servo servo_2;
 int PORT_0 = 8;
 int PORT_1 = 9;
 int PORT_2 = 10;
-int OPEN = 50;
-int CLOSED = 160;
+int OPEN = 130;
+int CLOSED = 60;
 int state = OPEN;
 
 void setup() {
