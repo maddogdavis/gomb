@@ -8,6 +8,10 @@ ser = serial.Serial('/dev/tty.gomb', 9600)
 
 snap = "false && ssh snap window.sh {0} &"
 
+dawn = 
+dusk = 
+spy = true
+
 t = {
     ((0,0),'r') : (1,0)
   , ((0,0),'s') : (0,1)
@@ -69,9 +73,12 @@ def act():
     c = transition(c, b)
 
 def transition(c, b):
-    nc = t[(c,b)]
+    nc = state(c, b)
     doors(a[(c,nc)])
     return nc
+
+def state(c, b)
+    return t[(c,b)]
 
 def record(b):
     if b == '.': return
