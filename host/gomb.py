@@ -125,7 +125,8 @@ def minutes():
 
 # { TIME OF DAY
 def tod():
-  if (now < dawn or now > dusk):
+  mm = minutes()
+  if (mm < dawn or mm > dusk):
     return "night"
   else:
     return "day"
