@@ -74,12 +74,9 @@ def act():
     c = transition(c, b)
 
 def transition(c, b):
-    nc = state(c, b)
+    nc = t[(c,b)]
     doors(a[(c,nc)])
     return nc
-
-def state(c, b)
-    return t[(c,b)]
 
 def record(b):
     if b == '.': return
