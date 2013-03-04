@@ -120,7 +120,7 @@ def stamp():
   return now().strftime("%b %d %H:%M:%S")
 
 def minutes():
-  return now().strftime("%H%M");
+  return int(now().strftime("%H%M"))
 # }
 
 # { TIME OF DAY
