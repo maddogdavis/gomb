@@ -10,7 +10,7 @@ snap = "false && ssh snap window.sh {0} &"
 tod = "_"
 
 dawn = 0520
-dusk = 2122
+dusk = 2124
 spy = "on"
 
 t = {
@@ -144,7 +144,7 @@ def minutes():
 # { TIME OF DAY
 def timeofday():
   mm = minutes()
-  if (mm < dawn or mm > dusk):
+  if (mm < dawn or mm >= dusk):
     return "night"
   else:
     return "day"
