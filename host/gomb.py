@@ -9,8 +9,8 @@ ser = serial.Serial('/dev/tty.gomb', 9600)
 snap = "false && ssh snap window.sh {0} &"
 tod = "_"
 
-dawn = 2120
-dusk = 2136
+dawn = 2142
+dusk = 2150
 spy = "on"
 
 t = {
