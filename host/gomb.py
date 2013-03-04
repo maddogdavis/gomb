@@ -86,7 +86,8 @@ def record(b):
 
 def checks():
   t = tod()
-  if (t != tod) settod(t)
+  if (t != tod):
+    settod(t)
 
 def transition(c, b):
   nc = state(c, b)
