@@ -86,8 +86,6 @@ def record(b):
 
 def checks():
   t = timeofday()
-  print "T="+t
-  print "tod="+tod
   if (t != tod):
     settimeofday(t)
 
