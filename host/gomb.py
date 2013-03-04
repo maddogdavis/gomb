@@ -126,6 +126,9 @@ def ident():
 def log(s, i):
   print msg(s, i)
 
+def logi(s):
+  log(s, ident());
+
 def msg(s, i):
   return stamp() + " [" + i + "] gomb: " + s
 # }
@@ -152,13 +155,18 @@ def timeofday():
 def settimeofday(t):
   global tod
   tod = t
-  log("it is " + tod + " time", ident())
+  logi("it is " + tod + " time")
 # }
 
 def spymode():
-  log("spymode is "+spy, ident());
+  logi("spymode is "+spy);
+
+def started():
+  logi("host started");
+
 
 def init():
+  started()
   while available(): read()
   settimeofday(timeofday())
   spymode()
