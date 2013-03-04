@@ -152,6 +152,7 @@ def timeofday():
     return "day"
 
 def settimeofday(t):
+  global tod
   tod = t
   log("it is " + tod + " time", ident())
 # }
