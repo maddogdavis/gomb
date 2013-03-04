@@ -80,7 +80,8 @@ def transition(c, b):
 
 def record(b):
     if b == '.': return
-    log(m[b], ident())
+    i = ident()
+    log(m[b], i)
     camera(i)
 
 def doors(ds):
