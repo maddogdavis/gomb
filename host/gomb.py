@@ -31,6 +31,11 @@ t = {
   , ((1,0),'S') : (1,0)
   , ((1,1),'r') : (1,1)
   , ((1,1),'s') : (1,1)
+
+  , ((0,0),'.') : (0,0)
+  , ((0,1),'.') : (0,1)
+  , ((1,0),'.') : (1,0)
+  , ((1,1),'.') : (1,1)
 }
 
 a = {
@@ -69,9 +74,20 @@ def act():
     global c
     b = read()
     record(b)
-    if b == '.': return
+    checks()
     if b == '*': return
     c = transition(c, b)
+
+def record(b):
+    if b == '.': return
+    i = ident()
+    log(m[b], i)
+    camera(i)
+
+def checks() {
+    t = tod()
+    if (t != tod) settod(t)
+}
 
 def transition(c, b):
     nc = state(c, b)
@@ -80,17 +96,11 @@ def transition(c, b):
 
 def state(c, b):
     if (tod == "night"):
-        return (0,0)
+      return (0,0)
     elif (spy == "on"):
       return (1,0)
     else:
       return t[(c,b)]
-
-def record(b):
-    if b == '.': return
-    i = ident()
-    log(m[b], i)
-    camera(i)
 
 def doors(ds):
     for d in ds:
@@ -145,6 +155,9 @@ def settod(t):
 # }
 
 
+TODO: MAKE SURE TOD SWITCH OCCURS
+TODO: MAKE SURE SPY MODE IS LOGGED
+
 def init():
     while available(): read()
     settod(tod());
@@ -153,4 +166,4 @@ init()
 while True:
     if available():
       act()
-    time.sleep(0.1)
+    time.sleep(0.2)
