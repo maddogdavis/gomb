@@ -9,7 +9,7 @@ ser = serial.Serial('/dev/tty.gomb', 9600)
 snap = "false && ssh snap window.sh {0} &"
 tod = "undefined"
 
-dawn = 0520
+dawn = 2000
 dusk = 2100
 spy = "on"
 
@@ -133,7 +133,7 @@ def tod():
 
 def settod(t):
   tod = t
-  log("time of day is " + tod, ident())
+  log("it is " + tod + " time", ident())
 # }
 
 
