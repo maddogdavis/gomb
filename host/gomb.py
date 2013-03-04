@@ -89,7 +89,7 @@ def checks():
   print "T="+t
   print "tod="+tod
   if (t != tod):
-    settod(t)
+    settimeofday(t)
 
 def transition(c, b):
   nc = state(c, b)
