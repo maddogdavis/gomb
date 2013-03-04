@@ -6,7 +6,7 @@ import os
 
 ser = serial.Serial('/dev/tty.gomb', 9600)
 
-snap = "false && ssh snap window.sh {0} &"
+snap = "true && ssh snap window.sh {0} &"
 tod = "_"
 
 dawn = 0530
