@@ -7,9 +7,10 @@ import os
 ser = serial.Serial('/dev/tty.gomb', 9600)
 
 snap = "false && ssh snap window.sh {0} &"
+tod = "undefined"
 
-dawn = 
-dusk = 
+dawn = 0520
+dusk = 1830
 spy = true
 
 t = {
@@ -82,8 +83,7 @@ def state(c, b)
 
 def record(b):
     if b == '.': return
-    i = ident()
-    log(m[b], i)
+    log(m[b], ident())
     camera(i)
 
 def doors(ds):
@@ -96,31 +96,53 @@ def read():
 def write(b):
     ser.write(b)
 
-# { CAMERA
+# CAMERA {
 def camera(i):
     os.system(snap.format(i))
-# CAMERA }
+# } 
 
 # { UUID
 def ident():
     return str(uuid.uuid4())[0:8]
-# UUID }
+# }
+
 # { LOGGING
 def log(s, i):
     print msg(s, i)
 
 def msg(s, i):
   return stamp() + " [" + i + "] gomb: " + s
+# }
 
-def stamp():
-  now = datetime.now()
-  return now.strftime("%b %d %H:%M:%S")
-
+# TIME {
 def now():
   return datetime.now()
-# LOGGING }
 
-while available(): read()
+def stamp():
+  return now().strftime("%b %d %H:%M:%S")
+
+def minutes():
+  return now().strftime("%H%M");
+# }
+
+# { TIME OF DAY
+def tod():
+  if (now < dawn || now > dusk):
+    return "night"
+  else:
+    return "day"
+
+def settod(t):
+  tod = t
+  log("time of day is " + tod, ident())
+# }
+
+
+def init():
+    while available(): read()
+    settod(tod());
+
+init()
 while True:
     if available():
       act()
