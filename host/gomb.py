@@ -117,3 +117,4 @@ while available(): read()
 while True:
     if available():
       act()
+    sleep(0.1)
