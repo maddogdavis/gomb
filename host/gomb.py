@@ -68,63 +68,62 @@ m = {
 c = (0,0)
 
 def available():
-    return ser.inWaiting() > 0
+  return ser.inWaiting() > 0
 
 def act():
-    global c
-    b = read()
-    record(b)
-    checks()
-    if b == '*': return
-    c = transition(c, b)
+  global c
+  b = read()
+  record(b)
+  checks()
+  if b == '*': return
+  c = transition(c, b)
 
 def record(b):
-    if b == '.': return
-    i = ident()
-    log(m[b], i)
-    camera(i)
+  if b == '.': return
+  i = ident()
+  log(m[b], i)
+  camera(i)
 
-def checks() {
-    t = tod()
-    if (t != tod) settod(t)
-}
+def checks():
+  t = tod()
+  if (t != tod) settod(t)
 
 def transition(c, b):
-    nc = state(c, b)
-    doors(a[(c,nc)])
-    return nc
+  nc = state(c, b)
+  doors(a[(c,nc)])
+  return nc
 
 def state(c, b):
-    if (tod == "night"):
-      return (0,0)
-    elif (spy == "on"):
-      return (1,0)
-    else:
-      return t[(c,b)]
+  if (tod == "night"):
+    return (0,0)
+  elif (spy == "on"):
+    return (1,0)
+  else:
+    return t[(c,b)]
 
 def doors(ds):
-    for d in ds:
-        write(d)
+  for d in ds:
+    write(d)
 
 def read():
-    return ser.read()
+  return ser.read()
 
 def write(b):
-    ser.write(b)
+  ser.write(b)
 
 # CAMERA {
 def camera(i):
-    os.system(snap.format(i))
+  os.system(snap.format(i))
 # } 
 
 # { UUID
 def ident():
-    return str(uuid.uuid4())[0:8]
+  return str(uuid.uuid4())[0:8]
 # }
 
 # { LOGGING
 def log(s, i):
-    print msg(s, i)
+  print msg(s, i)
 
 def msg(s, i):
   return stamp() + " [" + i + "] gomb: " + s
@@ -155,11 +154,11 @@ def settod(t):
 # }
 
 def init():
-    while available(): read()
-    settod(tod());
+  while available(): read()
+  settod(tod());
 
 init()
 while True:
-    if available():
-      act()
-    time.sleep(0.2)
+  if available():
+    act()
+  time.sleep(0.2)
