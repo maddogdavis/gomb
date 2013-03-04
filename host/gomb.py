@@ -154,10 +154,6 @@ def settod(t):
   log("it is " + tod + " time", ident())
 # }
 
-
-TODO: MAKE SURE TOD SWITCH OCCURS
-TODO: MAKE SURE SPY MODE IS LOGGED
-
 def init():
     while available(): read()
     settod(tod());
