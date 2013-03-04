@@ -7,10 +7,10 @@ import os
 ser = serial.Serial('/dev/tty.gomb', 9600)
 
 snap = "false && ssh snap window.sh {0} &"
-tod = "undefined"
+tod = "_"
 
 dawn = 0520
-dusk = 2122
+dusk = 2130
 spy = "on"
 
 t = {
@@ -155,9 +155,13 @@ def settimeofday(t):
   log("it is " + tod + " time", ident())
 # }
 
+def spymode():
+  log("spymode is "+spy, ident());
+
 def init():
   while available(): read()
-  settimeofday(timeofday());
+  settimeofday(timeofday())
+  spymode()
 
 init()
 while True:
