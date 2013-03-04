@@ -74,9 +74,17 @@ def act():
     c = transition(c, b)
 
 def transition(c, b):
-    nc = t[(c,b)]
+    nc = state(c, b)
     doors(a[(c,nc)])
     return nc
+
+def state(c, b):
+    if (tod == "night"):
+        return (0,0)
+    elif (spy == "on"):
+      return (1,0)
+    else:
+      return t[(c,b)]
 
 def record(b):
     if b == '.': return
