@@ -143,4 +143,4 @@ init()
 while True:
     if available():
       act()
-    sleep(0.1)
+    time.sleep(0.1)
