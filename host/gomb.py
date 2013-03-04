@@ -85,7 +85,7 @@ def record(b):
   camera(i)
 
 def checks():
-  t = tod()
+  t = timeofday()
   print "T="+t
   print "tod="+tod
   if (t != tod):
@@ -144,21 +144,21 @@ def minutes():
 # }
 
 # { TIME OF DAY
-def tod():
+def timeofday():
   mm = minutes()
   if (mm < dawn or mm > dusk):
     return "night"
   else:
     return "day"
 
-def settod(t):
+def settimeofday(t):
   tod = t
   log("it is " + tod + " time", ident())
 # }
 
 def init():
   while available(): read()
-  settod(tod());
+  settimeofday(timeofday());
 
 init()
 while True:
