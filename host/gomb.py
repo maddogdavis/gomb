@@ -80,9 +80,7 @@ def act():
 
 def record(b):
   if b == '.': return
-  i = ident()
-  log(m[b], i)
-  camera(i)
+  logi(m[b])
 
 def checks():
   t = timeofday()
@@ -127,7 +125,9 @@ def log(s, i):
   print msg(s, i)
 
 def logi(s):
-  log(s, ident());
+  i = ident();
+  log(s, i);
+  camera(i)
 
 def msg(s, i):
   return stamp() + " [" + i + "] gomb: " + s
