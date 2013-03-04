@@ -10,8 +10,8 @@ snap = "false && ssh snap window.sh {0} &"
 tod = "_"
 
 dawn = 0520
-dusk = 2125
-spy = "on"
+dusk = 2133
+spy = "off"
 
 t = {
     ((0,0),'r') : (1,0)
