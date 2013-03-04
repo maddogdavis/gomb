@@ -11,7 +11,7 @@ tod = "undefined"
 
 dawn = 0520
 dusk = 1830
-spy = true
+spy = "on"
 
 t = {
     ((0,0),'r') : (1,0)
