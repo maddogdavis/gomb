@@ -86,6 +86,8 @@ def record(b):
 
 def checks():
   t = tod()
+  print "T="+t
+  print "tod="+tod
   if (t != tod):
     settod(t)
 
