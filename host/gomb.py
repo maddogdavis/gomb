@@ -162,7 +162,10 @@ def settimeofday(t):
 # }
 
 def spymode():
-  logi("spymode is "+spy);
+  logi("spy mode is "+spy);
+
+def cleanmode():
+  logi("clean mode is "+clean);
 
 def started():
   logi("host started");
@@ -172,6 +175,7 @@ def init():
   started()
   while available(): read()
   settimeofday(timeofday())
+  cleanmode()
   spymode()
 
 init()
