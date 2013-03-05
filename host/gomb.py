@@ -12,6 +12,7 @@ tod = "_"
 dawn = 0515
 dusk = 1830
 spy = "off"
+clean = "off"
 
 t = {
     ((0,0),'r') : (1,0)
@@ -93,6 +94,8 @@ def transition(c, b):
   return nc
 
 def state(c, b):
+  if (clean == "on"):
+    return (1,1)
   if (tod == "night"):
     return (0,0)
   elif (spy == "on"):
